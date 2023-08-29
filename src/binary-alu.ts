@@ -49,7 +49,6 @@ type Mul10<A extends BinaryNumber> = Adder<ShiftLeft<A, 3>, ShiftLeft<A, 1>>
 
 // TODO substraction
 
-type CMP = 'EQ' | 'GT' | 'LT'
 type CompareBit<A extends Bit, B extends Bit> = 
   [A, B] extends [1, 0] ? 'GT' :
   [A, B] extends [0, 1] ? 'LT' :
@@ -64,20 +63,12 @@ type Compare<A extends BinaryNumber, B extends BinaryNumber> =
         : R
       : never 
 
-// have to do padding !!!!!!!!
+// [TODO] have to do padding !! 
 type TC1 = Compare<[1, 1, 0], [1, 1]>
 
-type FromStrings<Xs extends Array<string>> =
-  Xs extends [infer X, ...infer Xs extends Array<string>]
-    ? [FromString<X>, ...FromStrings<Xs>]
-    : []
+// Convert from/to BinaryNumbers
 
-type MapToNumbers<Xs extends Array<BinaryNumber>> = 
-  Xs extends [infer X extends BinaryNumber, ...infer Xs extends Array<BinaryNumber>]
-    ? [ToNumber<X>, ...MapToNumbers<Xs>]
-    : []
-
-// Convert binary number to number
+// Convert BinaryNumber to tuple of equal length
 type Unwind<A extends Array<Bit>, Acc extends Array<any> = [], P extends ANum.ANum = ANum.One> = 
   A extends [...infer Head extends Array<Bit>, 0] ? 
   Unwind<Head, Acc, ANum.Mul2<P>> :
@@ -85,7 +76,14 @@ type Unwind<A extends Array<Bit>, Acc extends Array<any> = [], P extends ANum.AN
   Unwind<Head, [...P, ...Acc], ANum.Mul2<P>>
   : Acc 
 
+// From BinaryNumber to number
 type ToNumber<A extends BinaryNumber> = Unwind<A>['length']
+
+// From array of BinaryNumbers to array of numbers
+type MapToNumbers<Xs extends Array<BinaryNumber>> = 
+  Xs extends [infer X extends BinaryNumber, ...infer Xs extends Array<BinaryNumber>]
+    ? [ToNumber<X>, ...MapToNumbers<Xs>]
+    : []
 
 type FromDigit<S> =
   S extends '0' ? [0] :
@@ -100,24 +98,33 @@ type FromDigit<S> =
   S extends '9' ? [1, 0, 0, 1] : 
   []
 
+// From decimal string to BinaryNumber
 type FromString<S, N extends BinaryNumber = BZero> =
   S extends `${infer First}${infer Rest}`
     ? FromString<Rest, Adder<Mul10<N>, FromDigit<First>>>
     : N
 
-type Split<S> = S extends `${infer First}${infer Rest}` ? [First, ...Split<Rest>] : []
-type Join<A extends Array<any>> = A extends [infer First extends string | number | boolean, ...infer Rest] ? `${First}${Join<Rest>}` : ''
+// From array of decimal strings to array of BinaryNumbers
+type MapFromStrings<Xs extends Array<string>> =
+  Xs extends [infer X, ...infer Xs extends Array<string>]
+    ? [FromString<X>, ...FromStrings<Xs>]
+    : []
 
 type ToBit<S> = S extends '0' ? 0 : 1
+
 type MapToBits<A extends Array<'0' | '1'>> = 
   A extends [infer First, ...infer Rest extends Array<'0'|'1'>] 
     ? [ToBit<First>, ...MapToBits<Rest>] 
     : []
 
+// From binary string to BinaryNumber
 // TODO constrain to ony '0' | '1' strings
 type FromBinaryString<S extends string> = MapToBits<Split<S>>
+
+// From BinaryNumber to binary string 
 type ToBinaryString<A extends BinaryNumber> = Join<A>
 
+// Tests
 type Test5 = FromBinaryString<'101'>
 type Test5N = ToNumber<Test5>
 type Test5x10 = Mul10<Test5>
