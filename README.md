@@ -1,4 +1,4 @@
-# Typescript typelevel binary arithmetics
+# Typescript typelevel binary arithmetic
 
 Arithmetics simulated with logical circuits at a type level
 
