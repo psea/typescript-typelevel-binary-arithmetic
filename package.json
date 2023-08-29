@@ -1,0 +1,15 @@
+{
+  "name": "typescript-typelevel-binary-arithmetics",
+  "version": "0.0.1",
+  "description": "Arithmetics simulated with logical circuits",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc"
+  },
+  "keywords": [],
+  "author": "Denis Lukichev",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
