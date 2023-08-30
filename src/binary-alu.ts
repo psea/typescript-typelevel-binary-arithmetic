@@ -44,6 +44,7 @@ type Adder<A extends BinaryNumber, B extends BinaryNumber, CI extends Bit = 0> =
       : never
 
 type Mul10<A extends BinaryNumber> = Adder<ShiftLeft<A, 3>, ShiftLeft<A, 1>>
+// type Mul10<A extends BinaryNumber> = Adder<[...A, 0, 0, 0], [...A, 0]>
 
 // TODO https://en.wikipedia.org/wiki/Binary_multiplier
 
