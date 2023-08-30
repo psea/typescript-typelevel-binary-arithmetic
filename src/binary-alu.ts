@@ -107,7 +107,7 @@ type FromString<S, N extends BinaryNumber = BZero> =
 // From array of decimal strings to array of BinaryNumbers
 type MapFromStrings<Xs extends Array<string>> =
   Xs extends [infer X, ...infer Xs extends Array<string>]
-    ? [FromString<X>, ...FromStrings<Xs>]
+    ? [FromString<X>, ...MapFromStrings<Xs>]
     : []
 
 type ToBit<S> = S extends '0' ? 0 : 1

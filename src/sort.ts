@@ -41,7 +41,7 @@ type MergeSort<Xs extends Array<BinaryNumber>> =
       ? Merge<MergeSort<Ls>, MergeSort<Rs>>
       : never
 
-type SortNumberStr<Xs extends readonly string[]> = MapToNumbers<MergeSort<FromStrings<Mutable<Xs>>>>
+type SortNumberStr<Xs extends readonly string[]> = MapToNumbers<MergeSort<MapFromStrings<Mutable<Xs>>>>
 
 type SN1 = SortNumberStr<['3', '1', '2', '0']>
   
